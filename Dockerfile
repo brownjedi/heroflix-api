@@ -1,7 +1,5 @@
 FROM golang:1.9.2-alpine3.6
 
-ARG app_env
-ENV APP_ENV ${app_env:-production}
 ENV GIN_MODE=${GIN_MODE:-release}
 
 # File Author / Maintainer
@@ -20,8 +18,8 @@ RUN mkdir -p $GOPATH/bin && \
 	go get github.com/pilu/fresh
 
 # create src directory
-RUN mkdir -p $GOPATH/src/api
-WORKDIR $GOPATH/src/api
+RUN mkdir -p $GOPATH/src/github.com/saikarthikreddyginni/heroflix-api
+WORKDIR $GOPATH/src/github.com/saikarthikreddyginni/heroflix-api
 
 # Install all dependencies of the current project
 COPY glide.lock .
@@ -32,10 +30,7 @@ RUN glide install
 COPY . .
 
 # if production setting will build binary
-RUN if [ ${APP_ENV} = production ]; \
-	then \
-		go install; \
-	fi
+RUN go install
 
 # run
-CMD ["api"]
+CMD ["heroflix-api"]
